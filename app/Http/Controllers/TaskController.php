@@ -69,20 +69,22 @@ class TaskController extends Controller
                 $activity_start_h= $request->input('activity_start_h');
                 $activity_end_h= $request->input('activity_end_h');
                 $activity_document_h= $request->file('activity_document_h');
-                foreach ($activity_h as $key => $value) {
-                    $task_h = Task::find($value);
-                    $task_h->update([
-                        'name' => $activity_name_h[$key],
-                        'finished' => !empty($activity_finished_h[$key]) ? $activity_finished_h[$key] : null,
-                        'description' => $activity_description_h[$key],
-                        'start_date' => $activity_start_h[$key],
-                        'end_date' => $activity_end_h[$key],
-                    ]);
-                    if(!empty($activity_document_h[$key])){
-                        if (!empty($activity_document_h[$key])) {
-                            if ($activity_document_h[$key]->isValid()) {
-                                $task_h->addMedia($activity_document_h[$key])
-                                ->toMediaCollection('project-task-file');
+                if(!empty($activity_h)){
+                    foreach ($activity_h as $key => $value) {
+                        $task_h = Task::find($value);
+                        $task_h->update([
+                            'name' => $activity_name_h[$key],
+                            'finished' => !empty($activity_finished_h[$key]) ? $activity_finished_h[$key] : null,
+                            'description' => $activity_description_h[$key],
+                            'start_date' => $activity_start_h[$key],
+                            'end_date' => $activity_end_h[$key],
+                        ]);
+                        if(!empty($activity_document_h[$key])){
+                            if (!empty($activity_document_h[$key])) {
+                                if ($activity_document_h[$key]->isValid()) {
+                                    $task_h->addMedia($activity_document_h[$key])
+                                    ->toMediaCollection('project-task-file');
+                                }
                             }
                         }
                     }
